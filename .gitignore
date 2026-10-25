@@ -1,0 +1,12 @@
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+
+# OS files
+.DS_Store
+Thumbs.db
