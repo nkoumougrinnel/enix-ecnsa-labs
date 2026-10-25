@@ -192,12 +192,8 @@ et de connectivité.
 ## Limites
 
 - Les résultats concernent un environnement pédagogique contrôlé.
-- La visibilité dépend du point de capture et du trafic généré.
-- L’absence d’un échange dans une capture ne démontre pas
-  l’absence du service sur le réseau.
 - Les estimations de remédiation ne sont pas des délais garantis
   de déploiement en entreprise.
-- Les conclusions ne décrivent aucun système bancaire réel.
 
 ## Participants et contributions
 
@@ -210,15 +206,6 @@ et de connectivité.
 
 ## Confidentialité et usage responsable
 
-Les captures peuvent contenir des identifiants de laboratoire,
-des communautés SNMP et des informations de configuration.
-
-- Conserver les preuves originales dans un espace à accès contrôlé.
-- Vérifier les fichiers avant toute diffusion publique.
-- Ne pas confondre le floutage des illustrations avec
-  l’assainissement des captures originales.
-- Ne pas réutiliser les identifiants du laboratoire sur d’autres systèmes.
-- Ne reproduire les tests que dans un environnement autorisé.
 
 Ce projet est un travail étudiant non officiel réalisé
 dans le cadre pédagogique de l’Académie ENIX.
