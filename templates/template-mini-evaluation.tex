@@ -1,0 +1,56 @@
+% MINI-ÉVALUATION — réponse courte, démontrée et facile à relire.
+% Copier ce fichier dans le dossier du devoir, puis remplacer les champs [entre crochets].
+\documentclass[11pt,a4paper]{article}
+
+\newcommand{\chargerpreambule}[1]{%
+  \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
+  \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
+  \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
+\chargerpreambule{preamble-commun.tex}
+\chargerpreambule{preamble-mini-evaluation.tex}
+\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+\begin{document}
+
+\faireentetecourte{Mini-évaluation pratique}{[Titre du devoir]}%
+  {[Prénom NOM — classe]}{\today}
+
+% Document court : pas de sommaire. Commencer par répondre, puis démontrer.
+\filconducteur
+
+\section{Question 1 — [Reprendre le sujet en quelques mots]}
+
+\begin{blocpedagogique}{Réponse directe}
+Répondre d’abord en une ou deux phrases. Le lecteur doit comprendre la conclusion
+avant de lire les détails.
+\end{blocpedagogique}
+
+\textbf{Démarche.} Expliquer l’opération réalisée et pourquoi elle répond à la
+question. Donner la commande ou le filtre utilisé, puis expliquer les éléments
+importants de son résultat.
+
+\begin{blocpedagogique}{Commande ou filtre utilisé}
+\texttt{[commande, filtre Wireshark ou méthode — remplacer cet exemple]}
+\end{blocpedagogique}
+
+% Ajouter une preuve seulement si elle aide à vérifier l'explication.
+\captureanalyse{fig:preuve-1}{captures/capture-1.png}%
+  {udp.port == 53}{[Dire ce que la capture prouve et dans quel contexte.]}
+
+\textbf{Interprétation.} Expliquer ce que cette observation signifie et répondre
+explicitement à la question. Si une limite empêche de conclure, la signaler.
+
+\section{Question 2 — [Intitulé]}
+
+\textbf{Réponse.} [Réponse courte et précise.]
+
+\textbf{Justification.} [Étapes suivies et raison du choix de la méthode.]
+
+\textbf{Résultat observé.} [Valeurs utiles, contexte et unité si nécessaire.]
+
+\section{Synthèse}
+
+En quelques lignes : rappeler les réponses principales, ce qui a été démontré
+et, s’il y a lieu, le point qui reste à vérifier.
+
+\end{document}

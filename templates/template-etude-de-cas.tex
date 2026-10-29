@@ -1,0 +1,128 @@
+% ÉTUDE DE CAS — analyser une situation, expliquer les risques et proposer un plan.
+% Copier dans le dossier du devoir ; remplacer les champs [entre crochets].
+\documentclass[11pt,a4paper]{article}
+
+\newcommand{\chargerpreambule}[1]{%
+  \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
+  \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
+  \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
+\chargerpreambule{preamble-commun.tex}
+\chargerpreambule{preamble-etude-de-cas.tex}
+\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+\begin{document}
+
+\fairepagegarde{Étude de cas}{[Titre de l’étude]}%
+  {[Organisation, système ou situation étudiée]}%
+  {[Prénom NOM — classe]}{\today}
+
+\tableofcontents
+\newpage
+
+\section{Résumé de l’étude}
+
+En quelques lignes, donner le sujet, les deux ou trois constats majeurs, leur
+importance et la décision ou l’action prioritaire. Cette partie s’écrit souvent
+en dernier : elle doit résumer ce que le document démontre.
+
+\filconducteur
+
+\section{Contexte et périmètre}
+
+\subsection{Situation étudiée}
+
+[Présenter l’organisation fictive ou réelle, le besoin et les éléments utiles
+pour comprendre le cas. Définir les termes techniques peu courants.]
+
+\subsection{Périmètre et limites}
+
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.2cm} X}
+  \toprule
+  Élément & Description \\
+  \midrule
+  Inclus & [Équipements, services, période, données ou processus examinés.] \\
+  Hors périmètre & [Éléments non examinés et raison de leur exclusion.] \\
+  Sources & [Documents, captures, entretiens ou commandes utilisés.] \\
+  Limites & [Ce qui manque pour conclure avec certitude.] \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Méthode suivie}
+
+Décrire les étapes dans l’ordre et justifier brièvement les choix :
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+  \item [Quelle information a été recueillie, et où ?]
+  \item [Comment a-t-elle été vérifiée ou comparée ?]
+  \item [Comment les constats ont-ils été classés et priorisés ?]
+\end{enumerate}
+
+\section{Constats appuyés par des preuves}
+
+\subsection{Constat 1 — [Intitulé factuel]}
+
+\textbf{Observation.} [Décrire précisément le fait observé, sans supposer sa cause.]
+
+\textbf{Preuve.} [Citer la capture, la commande, la ligne du document ou le
+résultat permettant à un lecteur de vérifier le constat.]
+
+\textbf{Explication.} [Traduire le résultat en langage simple : qu’est-ce qui
+se passe, et pourquoi est-ce notable ?]
+
+\textbf{Limite.} [Préciser ce que cette preuve ne permet pas, à elle seule,
+d’affirmer. Écrire « aucune identifiée » si c’est pertinent.]
+
+% Réutiliser la structure ci-dessus pour chaque constat important.
+\subsection{Constat 2 — [Intitulé factuel]}
+
+\textbf{Observation.} [Fait mesurable ou vérifiable.]
+
+\textbf{Preuve et explication.} [Source, résultat puis interprétation simple.]
+
+\section{Risques et priorités}
+
+Un constat décrit une situation observée ; un risque décrit un scénario
+possible et ses conséquences. Éviter de présenter une hypothèse comme un fait.
+
+\small
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.9cm} X X >{\raggedright\arraybackslash}p{2.1cm}}
+  \toprule
+  Priorité & Scénario possible & Conséquence & Justification \\
+  \midrule
+  Élevée & [Événement, faiblesse exploitée et actif touché.] & [Impact concret.] & [Preuve ou hypothèse à vérifier.] \\
+  Moyenne & [Scénario formulé simplement.] & [Impact concret.] & [Raison du classement.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+\normalsize
+
+\section{Plan d’action proposé}
+
+\small
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.9cm} X X >{\raggedright\arraybackslash}p{2.2cm}}
+  \toprule
+  Échéance & Action & Résultat attendu & Responsable \\
+  \midrule
+  Immédiate & [Mesure simple, prioritaire et vérifiable.] & [Comment vérifier que c’est fait ?] & [Rôle.] \\
+  À planifier & [Mesure nécessitant du temps, des moyens ou une validation.] & [Résultat attendu.] & [Rôle.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+\normalsize
+
+\section{Conclusion}
+
+Répondre à la question de départ. Rappeler les constats les plus importants,
+la priorité retenue et les limites qui restent à lever. Ne pas introduire de
+nouveau résultat dans la conclusion.
+
+\section*{Références et annexes}
+\addcontentsline{toc}{section}{Références et annexes}
+
+\begin{itemize}[leftmargin=*]
+  \item [Référence : titre, auteur ou organisme, date et adresse si nécessaire.]
+  \item [Annexe : nom et utilité de la capture, configuration ou donnée jointe.]
+\end{itemize}
+
+\end{document}

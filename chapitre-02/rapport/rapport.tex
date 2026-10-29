@@ -1,0 +1,490 @@
+
+\documentclass[11pt,a4paper]{article}
+
+\newcommand{\chargerpreambule}[1]{%
+	\IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
+	\IfFileExists{../templates/#1}{\input{../templates/#1}}{%
+	\IfFileExists{templates/#1}{\input{templates/#1}}{%
+	\input{#1}}}}}
+
+\chargerpreambule{preamble-commun.tex}
+\chargerpreambule{preamble-livrable.tex}
+\contextedevoir{ACX401.1 — ECNSA}{Chapitre 2 — Gouvernance, politique de sécurité et cadre légal}
+
+\usepackage{xurl}
+
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{4pt}
+\setlength{\tabcolsep}{4pt}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\NA}{\textemdash}
+\newcommand{\capture}[2]{%
+	\begin{figure}[H]
+		\centering
+		\IfFileExists{#1}{\includegraphics[width=0.88\linewidth,height=6cm,keepaspectratio]{#1}}%
+		{\fbox{\parbox{0.78\linewidth}{\centering Capture à insérer : \texttt{#1}}}}
+		\caption{#2}
+\end{figure}}
+
+	\begin{document}
+	
+	\renewcommand{\liengit}{https://github.com/nkoumougrinnel/enix-ecnsa-labs.git}
+	
+	\fairepagegarde{Livrable de sécurité}{Dossier de gouvernance et de sécurité réseau}%
+		{CamTrust Bank — inventaire, risques et politique de sécurité}%
+		{NKOUMOU TJADE Grinnel Germain et ETOUNDI Ferdinand Le Grang}%
+		{27 octobre 2026}
+	
+	\tableofcontents
+	\newpage
+	
+	% ---------------- INTRODUCTION ----------------
+	\section{Objet et périmètre du dossier}
+	
+	CamTrust Bank est un établissement de crédit fictif de 300 employés. Son siège se trouve à Yaoundé et ses agences sont situées à Douala et Garoua. Ses services comprennent le core banking, la passerelle Mobile Money, la monétique, la messagerie, le site web et le Wi-Fi clients en agence. La banque dispose de quatre administrateurs système et réseau, de deux prestataires de maintenance, d'un accès Internet par fibre avec une liaison 4G de secours et de VPN inter-sites.
+	
+	Ce dossier rassemble les éléments nécessaires à la gestion et au contrôle de la sécurité réseau :
+	\begin{itemize}
+		\item l'inventaire des valeurs métier et des biens supports, leur criticité et la classification des informations ;
+		\item le registre des risques et une synthèse destinée à la direction ;
+		\item la politique de sécurité réseau et la trace de sa revue croisée ;
+		\item la grille de contrôle, les résultats constatés sur la topologie de laboratoire et les preuves disponibles.
+	\end{itemize}
+	
+	% ---------------- INVENTAIRE ----------------
+	\section{Inventaire et classification des actifs}
+	
+	\subsection{Découverte du réseau et limites des sources}
+	
+	 Le tableau suivant présente les équipements les services relevés dans le laboratoire à partir des baux DHCP et scans réseau.
+	
+	\small
+	\begin{longtable}{p{2.7cm} p{6.0cm} p{6.1cm}}
+		\caption{Sources de découverte du réseau et résultats relevés.}\\
+		\hline
+		\textbf{Source} & \textbf{Commande} & \textbf{Résultat relevé}\\
+		\hline
+		\endhead
+		Routeur Cisco & \texttt{show cdp neighbors detail} &  \textbf{Switch} (Cisco IOS vios\_l2, version 15.2 CML) sur Gi0/0 ; \textbf{R-DLA} (MikroTik, version 7.23.8 long-term) sur Gi0/2, IP 172.16.12.2.\\
+		\hline
+		Routeur MikroTik & \texttt{/ip neighbor print detail} & \textbf{R-SIEGE} (Cisco IOSv, version 15.8(3)M2) sur ether1, IP 172.16.12.1.\\
+		\hline
+		Baux DHCP Cisco & \texttt{show ip dhcp binding} & \textbf{10.10.10.100} et \textbf{10.10.10.101}.\\
+		\hline
+		Baux DHCP MikroTik & \texttt{/ip dhcp-server lease print} & \textbf{10.20.10.200}.\\
+		\hline
+		Découverte active sur Client Linux & \texttt{nmap -sn 10.10.10.0/24} & Deux hôtes détectés comme actifs : \textbf{10.10.10.1} et \textbf{10.10.10.100}.\\
+		\hline
+		Détection de services sur Linux & \texttt{sudo nmap -sV 203.0.113.10} & Trois ports TCP ouverts : \textbf{21} (vsftpd 3.0.5), \textbf{53} (dnsmasq 2.91) et \textbf{80} (Apache httpd 2.4.52 sur Ubuntu).\\
+	\hline
+	\end{longtable}
+	\normalsize
+	
+	\paragraph{Bilan des observations.}
+	
+	Les résultats confirment la présence de deux équipements réseau voisins, R-SIEGE et R-DLA, ainsi que d'un commutateur détecté depuis le routeur Cisco.
+	
+	Un écart apparaît notamment sur le réseau \texttt{10.10.10.0/24} : deux baux sont recensés côté Cisco, mais seuls les hôtes \texttt{10.10.10.1} et \texttt{10.10.10.100} répondent au scan. L'adresse \texttt{10.10.10.101}, présente dans les baux DHCP, n'apparaît donc pas parmi les hôtes détectés.
+	
+	Par ailleurs, R-FAI, identifié dans la topologie avec l'adresse \texttt{198.51.100.1}, n'apparaît pas dans les voisins CDP relevés sur R-SIEGE.
+	
+	Ces écarts montrent qu'aucune source ne fournit, à elle seule, une représentation complète et fiable du réseau. Raison pour laquelle en entreprise, on rapproche les équipements découverts par scan, les adresses attribuées  dans baux, les factures d'achat de materiel, afin de faire une meilleure cartographie.
+	
+	\subsection{Inventaire des valeurs métier et des biens supports}
+	
+	\scriptsize
+	\begin{longtable}{p{0.8cm} p{2.5cm} p{1.3cm} p{1.2cm} p{1.7cm} p{1.5cm} p{2.1cm} p{1.2cm} c}
+		\caption{Inventaire des valeurs métier et des biens supports.}\\
+		\hline
+		\textbf{ID} & \textbf{Actif} & \textbf{Type} & \textbf{Site} & \textbf{IP} & \textbf{Version} & \textbf{Propriétaire} & \textbf{Fin support} & \textbf{Crit.}\\
+		\hline
+		\endhead
+		VM-01 & Ouvrir et gérer un compte client (core banking) & Valeur métier & Siège & \NA & \NA & Directeur des opérations & -- & 4\\
+		\hline
+		VM-02 & Transférer et payer via Mobile Money & Valeur métier & Siège & \NA & \NA & Responsable Mobile Money & -- & 4\\
+		\hline
+		VM-03 & Émettre et autoriser les cartes et retraits DAB & Valeur métier & Siège & \NA & \NA & Responsable monétique & -- & 4\\
+		\hline
+		VM-04 & Échanger par messagerie & Valeur métier & Siège & \NA & \NA & DSI & -- & 3\\
+		\hline
+		VM-05 & Informer et servir les clients par le site web & Valeur métier & Siège & \NA & \NA & Responsable communication & -- & 3\\
+		\hline
+		VM-06 & Fournir le Wi-Fi aux clients en agence & Valeur métier & Agences & \NA & \NA & Directeur des agences & -- & 3\\
+		\hline
+		VM-07 & Gérer les ressources humaines (paie, congés) & Valeur métier & Siège & \NA & \NA & Directeur des RH & -- & 3\\
+		\hline
+		VM-08 & Assurer la comptabilité et le reporting réglementaire & Valeur métier & Siège & \NA & \NA & Directeur financier & -- & 4\\
+		\hline
+		VM-09 & Gérer la relation client (CRM, réclamations) & Valeur métier & Siège & \NA & \NA & Directeur des opérations & -- & 3\\
+		\hline
+		VM-10 & Assurer la surveillance et la sécurité physique des agences & Valeur métier & Agences & \NA & \NA & Responsable sécurité & -- & 3\\
+		\hline
+		BS-01 & Routeur R-SIEGE (Cisco IOSv) & Support & Yaoundé & 10.10.10.1 & 15.8(3)M2 & DSI & -- & 4\\
+		\hline
+		BS-02 & Routeur R-DLA (MikroTik CHR) & Support & Douala & 172.16.12.2 & 7.23.8 (long-term) & DSI & -- & 4\\
+		\hline
+		BS-03 & Commutateur SW-SIEGE (Cisco IOSvL2) & Support & Yaoundé & LAN & 15.2(CML) & DSI & -- & 4\\
+		\hline
+		BS-04 & Routeur R-FAI (VyOS) & Support & Réseau opérateur/lab & 198.51.100.1 & Rolling & Prestataire & -- & 4\\
+		\hline
+		BS-05 & Serveur SRV-INTERNET (Ubuntu) & Support & DMZ & 203.0.113.10 & Ubuntu 22.04 (Apache 2.4.52, vsftpd 3.0.5, dnsmasq 2.91) & DSI & -- & 3\\
+		\hline
+		BS-06 & Poste CLIENT-LINUX & Support & Lab / poste type agence & 10.10.10.100 & Ubuntu 22.04 & Direction des agences & -- & 3\\
+		\hline
+		BS-07 & Serveurs core banking & Support & Yaoundé & \NA & \NA & DSI & -- & 4\\
+		\hline
+		BS-08 & Passerelle Mobile Money & Support & Yaoundé & \NA & \NA & Responsable Mobile Money & -- & 4\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Grille DICP}
+	
+	\small
+	\begin{longtable}{p{2.5cm} c c c c p{7.3cm} c}
+		\caption{Grille DICP des services.}\\
+		\hline
+		\textbf{Service} & \textbf{D} & \textbf{I} & \textbf{C} & \textbf{P} & \textbf{Conséquence métier}\\
+		\hline
+		\endhead
+		Core banking & 4 & 4 & 4 & 4 & Un arrêt prolongé bloque l'accès aux comptes ; une altération provoque des pertes financières ; une fuite porte atteinte au secret bancaire ; les opérations doivent être traçables en cas de litige. \\
+		\hline
+		Mobile Money & 4 & 4 & 3 & 4 & L'indisponibilité bloque paiements et transferts ; l'altération peut entraîner des transferts frauduleux ; la traçabilité permet de contester une opération. \\
+		\hline
+		Monétique & 4 & 4 & 4 & 3 & Une panne rend cartes et DAB indisponibles ; la fuite ou l'altération des données de cartes favorise la fraude et engage la responsabilité de la banque. \\
+		\hline
+		Messagerie & 2 & 2 & 3 & 2 & Une interruption de quelques heures peut être tolérée ; les échanges peuvent contenir des informations internes et des données clients. \\
+		\hline
+		Site web & 2 & 3 & 1 & 2 & Le contenu est public, mais une défiguration ou une redirection nuit à la réputation et peut servir à l'hameçonnage. \\
+		\hline
+		Wi-Fi clients & 1 & 1 & 2 & 3 & Une interruption est généralement tolérable ; la traçabilité des usages reste nécessaire et le réseau invité ne doit pas donner accès au réseau interne. \\
+	\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Classification de l'information et règles réseau}
+	
+	\small
+	\begin{longtable}{p{2.5cm} p{6.5cm} p{6.5cm}}
+		\caption{Classification de l'information et règles réseau.}\\
+		\hline
+		\textbf{Niveau} & \textbf{Information} & \textbf{Règle réseau}\\
+		\hline
+		\endhead
+		\textbf{Public} &
+		Tarifs et grille des frais, contenu publié sur le site web &
+		Diffusion autorisée depuis les services prévus ; toute modification doit suivre une procédure approuvée. \\
+		\hline
+		
+		\textbf{Interne} &
+		Procédures internes, annuaire interne et organigramme &
+		Accès réservé aux utilisateurs autorisés ; pas d'accès depuis le Wi-Fi clients et pas de sortie directe non filtrée vers Internet. \\
+		\hline
+		
+		\textbf{Confidentiel} &
+		Relevés de compte, fichier clients et dossiers KYC, fiches de paie, plans d'adressage et configurations &
+		Chiffrement en transit ; accès interdit depuis le Wi-Fi clients et les services exposés en DMZ. \\
+		\hline
+		
+		\textbf{Secret} &
+		Mots de passe administrateurs, clés de chiffrement &
+		Accès limité aux administrateurs autorisés selon le besoin ; stockage et transmission protégés, avec journalisation des accès. \\
+	\hline
+	\end{longtable}
+	\normalsize
+	
+	% ---------------- RISQUES ----------------
+	\section{Registre des risques}
+	
+	
+	\scriptsize
+	\begin{longtable}{p{0.5cm} p{3.1cm} p{1.1cm} c c p{1.1cm} p{3.5cm} p{1.9cm} p{1.3cm}}
+		\caption{Registre des risques.}\\
+		\hline
+		\textbf{ID} & \textbf{Scénario} & \textbf{Valeur touchée} & \textbf{G} & \textbf{V} & \textbf{Niveau} & \textbf{Traitement et mesures} & \textbf{Responsable / délai} & \textbf{Résiduel}\\
+		\hline
+		\endhead
+		R1 & Un agent d'agence (BS-15) utilise le VPN (BS-14) pour atteindre un réseau insuffisamment segmenté, puis accède aux serveurs core banking (BS-07) et effectue des opérations frauduleuses insuffisamment tracées. & VM-01, VM-02 & 4 & 3 & 12 & Réduire : VLAN et ACL entre agences et siège ; comptes nominatifs ; journalisation centralisée ; double validation des opérations sensibles. & DSI / 3 mois & 4 \\
+		\hline
+		R2 & Un courriel piégé est ouvert sur un poste d'agence (BS-15). Le logiciel malveillant se propage via le réseau inter-sites (BS-14) et chiffre les serveurs (BS-07) ainsi que les sauvegardes connectées (BS-16). & VM-01 à VM-03 & 4 & 3 & 12 & Réduire : segmentation et filtrage ; filtrage de la messagerie ; mises à jour ; sauvegardes isolées et tests de restauration. & DSI / 3 mois & 4\\
+		\hline
+		R3 & La fibre (BS-12) tombe en panne un jour de paie. La liaison 4G (BS-13) ne prend pas automatiquement le relais ou n'a pas un débit suffisant ; les services en ligne et les VPN deviennent indisponibles. & VM-02, VM-04 & 3 & 3 & 9 & Réduire : bascule automatique fibre/4G ; dimensionnement de la liaison de secours ; supervision et test mensuel. & Responsable réseau / 2 mois & 3\\
+		\hline
+		R4 & Un prestataire (BS-18) utilise un compte partagé ou permanent. Des identifiants compromis lui donnent accès au réseau d'administration (BS-01, BS-02), permettant une modification de configuration ou un vol de données. & VM-01, VM-03 & 4 & 2 & 8 & Réduire : VPN, comptes nominatifs temporaires, MFA, réseau de maintenance filtré et journalisation des sessions. & DSI / 4 mois & 4\\
+		\hline
+		R5 & Un attaquant cible un service exposé lié à la passerelle Mobile Money (BS-08) ou à l'hébergement externe (BS-05), exploite une vulnérabilité et tente d'injecter des transactions frauduleuses. & VM-02 & 4 & 2 & 8 & Réduire : pare-feu et DMZ ; mises à jour ; limitation des flux ; détection des anomalies et centralisation des journaux. & Responsable Mobile Money / 3 mois & 4\\
+		\hline
+		R6 & Une coupure électrique prolongée interrompt les équipements réseau (BS-01) et les serveurs (BS-07). L'autonomie électrique est insuffisante et le core banking reste indisponible. & VM-01 à VM-03 & 4 & 2 & 8 & Réduire : onduleurs et groupe électrogène entretenus et testés ; procédure de continuité ; sauvegardes des configurations et alertes de supervision. & DSI / 6 mois & 4\\
+	\hline
+	\end{longtable}
+	\normalsize
+	
+	\section{Synthèse destinée à la direction}
+	
+	\textbf{À l'attention du directeur général.} Trois risques demandent une action prioritaire, car ils peuvent interrompre les services de la banque ou entraîner des pertes financières.
+	
+	\begin{itemize}
+		\item \textbf{Fraude interne -- niveau critique (12).} Un agent pourrait accéder à des systèmes qui ne sont pas nécessaires à son travail, sans que ses actions soient correctement attribuées. Il faut limiter les accès par agence et identifier chaque utilisateur. 
+		\item \textbf{Rançongiciel -- niveau critique (12).} Un courriel piégé pourrait bloquer des serveurs et atteindre les sauvegardes connectées. Il faut cloisonner le réseau, mieux filtrer les courriels et conserver des sauvegardes isolées dont la restauration est testée.
+		\item \textbf{Coupure Internet -- niveau élevé (9).} Si la fibre tombe en panne, les agences et les paiements peuvent être interrompus si la 4G ne prend pas le relais. Il faut automatiser la bascule et vérifier que la liaison de secours est suffisante.
+	\end{itemize}
+	
+	Après traitement, les risques résiduels estimés sont de niveau moyen pour la fraude interne et le rançongiciel, et faible pour la coupure Internet.
+	
+		% ---------------- POLITIQUE ----------------
+	\section{Politique de sécurité réseau}
+	
+	\subsection{Objet, périmètre et références}
+	
+	La présente politique définit les exigences minimales de sécurité applicables au réseau de CamTrust Bank : siège de Yaoundé, agences de Douala et Garoua, liaisons inter-sites, équipements réseau, services exposés et accès des prestataires. Elle vise à protéger la disponibilité, l'intégrité, la confidentialité et la traçabilité des opérations. Les règles ci-dessous constituent le référentiel. Les références « CIS » et « NSA » désignent des guides de bonnes pratiques. Les références « R1 » à « R6 » renvoient aux risques du registre.
+	
+	\subsection{Rôles et responsabilités}
+	
+	\begin{itemize}
+		\item \textbf{Directeur général} : approuve la politique et ses révisions.
+		\item \textbf{DSI} : est responsable de l'application de la politique et de son contrôle annuel.
+		\item \textbf{Responsable réseau} : met en œuvre les règles sur les équipements et tient les preuves de contrôle à jour.
+		\item \textbf{Administrateurs système et réseau} : appliquent les configurations et signalent tout écart.
+		\item \textbf{Prestataires de maintenance} : respectent le périmètre défini dans leur autorisation d'intervention.
+	\end{itemize}
+	
+	\subsection{Architecture et zones de sécurité}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences d'architecture et de zones de sécurité.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-01 & Le réseau doit séparer au minimum les serveurs, l'administration, les postes bureautiques, le Wi-Fi clients, la monétique et la DMZ. & Siège et agences & VLAN et sous-réseaux distincts. & \texttt{show vlan brief} (Cisco) ; \texttt{/interface bridge vlan print} (MikroTik). & R1, R2 ; CIS\\
+		\hline
+		RES-02 & Les services accessibles depuis Internet doivent être placés en DMZ ; aucun service interne ne doit être exposé directement. & Services exposés (SRV-INTERNET 203.0.113.10) & Filtrage entre Internet, DMZ et réseau interne. & \texttt{nmap -sV 203.0.113.10} depuis l'extérieur (seuls 21, 53, 80 ouverts). & R5 ; NSA\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Contrôle d'accès au réseau (câble et Wi-Fi)}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de contrôle d'accès au réseau.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-03 & Tout port inutilisé doit être désactivé et placé dans un VLAN isolé non routé. & Commutateur SW-SIEGE & \texttt{shutdown} sur les interfaces et VLAN dédié. & \texttt{show interfaces status} (chercher "disabled"). & R2 ; CIS\\
+		\hline
+		RES-04 & La découverte de voisinage (CDP/LLDP) doit être désactivée sur les interfaces exposées à Internet et vers les prestataires. & R-SIEGE Gi0/1 (vers R-FAI) & \texttt{no cdp enable} et \texttt{no lldp transmit}. & \texttt{show cdp interface}. & R4 ; CIS\\
+		\hline
+		RES-05 & Le Wi-Fi clients doit être isolé du réseau interne et n'autoriser que les flux nécessaires vers Internet. & Bornes Wi-Fi des agences & VLAN invité et ACL dédiées. & \texttt{show access-lists} et test de ping depuis le Wi-Fi. & R2 ; CIS\\
+		\hline
+		RES-06 & Le Wi-Fi clients doit utiliser un SSID distinct et l'isolation entre clients doit être activée. & Bornes Wi-Fi & WPA2-AES ou WPA3 ; isolation des clients. & Configuration de la borne (interface web). & R2 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Administration des équipements}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences d'administration des équipements.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-07 & L'administration des équipements réseau doit utiliser SSH version 2. Telnet et HTTP non chiffré sont interdits. & Routeurs R-SIEGE, R-DLA ; Switch SW-SIEGE & Cisco : SSH v2 et VTY en SSH ; MikroTik : désactiver telnet et www. & \texttt{show ip ssh} ; \texttt{/ip service print} (vérifier que 23 et 80 sont "no"). & R4 ; CIS\\
+		\hline
+		RES-08 & Chaque administrateur doit disposer d'un compte nominatif ; les comptes partagés sont interdits. & Tous les équipements & Comptes individuels et privilèges minimaux. & \texttt{show run | include username} ; \texttt{/user print}. & R1, R4 ; CIS\\
+		\hline
+		RES-09 & L'administration doit être autorisée uniquement depuis le réseau d'administration prévu. & Équipements réseau & ACL sur VTY et restriction des services d'administration. & \texttt{show access-lists} ; \texttt{show run | section line vty}. & R4 ; CIS\\
+		\hline
+		RES-10 & Les secrets d'authentification doivent être stockés selon les mécanismes de protection disponibles ; les mots de passe en clair sont interdits. & Équipements Cisco et MikroTik & \texttt{enable secret} sur Cisco ; \texttt{/user add} avec mot de passe sur MikroTik. & \texttt{show run | include password}. & R4 ; CIS\\
+		\hline
+		RES-11 & SNMP v1/v2c, FTP et Telnet doivent être désactivés ; la supervision doit utiliser SNMPv3. & Équipements réseau & SNMPv3 authPriv. & \texttt{show snmp user} ; \texttt{/snmp print}. & R4 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Filtrage et matrice de flux}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de filtrage et matrice de flux.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-12 & Les flux entre VLAN doivent être filtrés selon le besoin métier, avec refus par défaut et journalisation des refus. & Routeurs et pare-feu & ACL et règles de pare-feu explicites. & \texttt{show access-lists} ; \texttt{show logging} (pour les refus). & R2 ; CIS\\
+		\hline
+		RES-13 & Les postes des agences (ex: PC-DLA 10.20.10.0/24) ne doivent accéder qu'aux serveurs et ports nécessaires. & R-DLA vers R-SIEGE & ACL minimales ; interdiction d'accès direct à la monétique et au Mobile Money. & \texttt{/ip firewall filter print} ; test de ping refusé. & R1, R2 ; CIS\\
+		\hline
+		RES-14 & Tout transfert de données personnelles vers l'étranger doit faire l'objet d'une vérification juridique préalable. & Flux sortants & Inventaire des transferts et filtrage des destinations. & Registre des transferts et validation documentée (loi 2024/017). & Loi n° 2024/017\\
+		\hline
+		RES-15 & Les données classées Confidentiel ou Secret doivent être chiffrées en transit. & Réseau interne et inter-sites & TLS, SSH et IPsec. & \texttt{show crypto ipsec sa} ; capture Wireshark (TLS). & R1 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Accès distants, télétravail et prestataires}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences pour les accès distants et les prestataires.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-16 & Les accès des prestataires doivent être nominatifs, limités dans le temps et protégés par MFA. & Prestataires & VPN, comptes temporaires et MFA. & Liste des comptes et dates d'expiration. & R4 ; CIS\\
+		\hline
+		RES-17 & Les prestataires ne doivent accéder qu'aux équipements prévus ; leurs sessions doivent être journalisées. & Maintenance distante & Réseau de maintenance filtré et journalisation. & \texttt{show access-lists} ; \texttt{show logging}. & R4 ; CIS\\
+		\hline
+		RES-18 & Tout accès distant d'administration doit passer par un VPN ; SSH et RDP ne doivent pas être exposés à Internet. & Télétravail et admin distante & VPN chiffré, MFA et filtrage des ports. & \texttt{nmap -p 22,3389 <IP\_publique>} (doit être "filtered" ou "closed"). & R1, R2 ; NSA\\
+		\hline
+		RES-19 & Les liaisons inter-sites (R-SIEGE vers R-DLA) doivent utiliser des tunnels VPN chiffrés robustes. & Liaison Yaoundé - Douala & IPsec avec AES et SHA-2. & \texttt{show crypto ipsec sa}. & R1 ; NSA\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Journalisation, horodatage et conservation}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de journalisation et d'horodatage.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-20 & Les équipements réseau doivent transmettre leurs journaux à un service centralisé. & Équipements réseau & Syslog centralisé (ex: vers 10.10.99.20). & \texttt{show logging} (vérifier l'hôte distant) ; \texttt{/system logging action print}. & R1, R4 ; CIS\\
+		\hline
+		RES-21 & La durée de conservation des journaux doit être définie et validée. & Serveur de journaux & Politique de rétention. & Paramètres de rétention sur le serveur. & R1 ; Loi n° 2010/012\\
+		\hline
+		RES-22 & Les équipements doivent synchroniser leur horloge sur une source NTP. & Équipements réseau & Serveurs NTP configurés. & \texttt{show ntp status} ; \texttt{/system ntp client print}. & R1 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Sauvegarde des configurations et continuité}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de sauvegarde des configurations.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-23 & Les configurations doivent être sauvegardées après chaque changement et une copie protégée doit être conservée hors ligne. & Routeurs et commutateurs & Export versionné (ex: TFTP ou copie locale). & \texttt{show flash} (présence du fichier de backup) ; date du dernier export. & R2, R6 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Mises à jour et fin de support}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de mise à jour et de fin de support.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-24 & Les équipements doivent être maintenus sur des versions supportées. & Tous équipements & Inventaire des versions et veille. & \texttt{show version} ; \texttt{/system package print}. & R2, R5 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection{Gestion des changements et dérogations}
+	
+	\scriptsize
+	\begin{longtable}{p{0.7cm} p{3.95cm} p{1.95cm} p{3.2cm} p{3.0cm} p{1.8cm}}
+		\caption{Exigences de gestion des changements.}\\
+		\hline
+		\textbf{ID} & \textbf{Exigence} & \textbf{Périmètre} & \textbf{Mesure technique} & \textbf{Preuve de contrôle} & \textbf{Référence}\\
+		\hline
+		\endhead
+		RES-25 & Tout changement réseau doit être approuvé, documenté et accompagné d'un plan de retour arrière. & Tous équipements & Registre de changements. & Extrait du registre et comparaison de configuration. & R4 ; CIS\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	Toute dérogation à une règle doit être demandée par écrit, motivée, limitée dans le temps et validée par la DSI. La conformité est vérifiée chaque année. Tout manquement expose son auteur aux sanctions du règlement intérieur.
+	
+	% ---------------- CONTROLES LAB ----------------
+	\section{Grille de contrôle et résultats sur le laboratoire}
+	
+	La topologie actuelle (R-SIEGE, R-DLA, R-FAI, SW-SIEGE) permet de tester immédiatement un sous-ensemble de règles. Les 5 règles ci-dessous ont été sélectionnées pour leur facilité de vérification avec les commandes disponibles.
+	
+		\scriptsize
+	\begin{longtable}{p{0.85cm} p{3.65cm} p{3.0cm} p{3.2cm} p{1.4cm} p{1.2cm}}
+		\caption{Grille de contrôle restreinte aux règles testables sur le lab.}\\
+		\hline
+		\textbf{Règle} & \textbf{Méthode (Commande)} & \textbf{Résultat attendu} & \textbf{Résultat observé} & \textbf{Statut} & \textbf{Preuve}\\
+		\hline
+		\endhead
+		RES-07 & \texttt{show ip ssh} (R-SIEGE) ; \texttt{/ip service print} (R-DLA) & SSH v2 activé ; Telnet (23) et HTTP (80) désactivés ("no"). & \textbf{R-SIEGE :} SSH v2 est bien activé. \textbf{R-DLA :} (à vérifier sur votre capture MikroTik). & Conforme (partiel) & Capt. 1\\
+		\hline
+		RES-01 & \texttt{show vlan brief} (SW-SIEGE) & Présence de VLAN distincts pour le LAN, l'administration, etc. & \textbf{SW-SIEGE :} Seul le VLAN 1 (default) est actif. Tous les ports sont dans le VLAN 1. Aucune segmentation. & Non conforme & Capt. 3\\
+		\hline
+		RES-03 & \texttt{show interfaces status} (SW-SIEGE) & Les ports non utilisés sont en état "disabled". & \textbf{SW-SIEGE :} Tous les ports (Gi0/0 à Gi1/3) sont à l'état "connected" dans le VLAN 1. Aucun port n'est désactivé. & Non conforme & Capt. 3\\
+		\hline
+		RES-20 & \texttt{show logging} (R-SIEGE) ; \texttt{/system logging action print} (R-DLA) & Les journaux sont envoyés vers un serveur distant (ex: 10.10.99.20). & \textbf{R-SIEGE :} Le logging est activé, mais aucun serveur distant (Syslog) n'est configuré. Le "Log Buffer" est local et limité à 8192 octets. & Non conforme & Capt. 4\\
+		\hline
+		RES-22 & \texttt{show ntp status} (R-SIEGE) ; \texttt{/system ntp client print} (R-DLA) & L'horloge est synchronisée sur une source NTP. & \textbf{R-SIEGE :} Le message indique clairement "\%NTP is not enabled". L'horloge n'est pas synchronisée. & Non conforme & Capt. 5\\
+		\hline
+	\end{longtable}
+	\normalsize
+	
+	\subsection*{Preuves disponibles}
+	
+	\capture{images/sh_ip_ssh.png}{Capt. 1 — Preuve RES-07 : Vérification de l'usage exclusif de SSH v2 et de la désactivation de Telnet/HTTP sur R-SIEGE.}
+	\capture{images/sh_vlan_brief.png}{Capt. 3 — Preuve RES-01 : Segmentation VLAN sur SW-SIEGE.}
+	\capture{images/sh_interfaces_status.png}{Capt. 3 — Preuve RES-03 : État des ports et ports inutilisés sur SW-SIEGE.}
+	\capture{images/sh_logging.png}{Capt. 4 — Preuve RES-20 : Configuration de l'envoi des journaux vers le serveur syslog central sur R-SIEGE.}
+	\capture{images/sh_ntp_status.png}{Capt. 5 — Preuve RES-22 : État de la synchronisation horaire NTP sur R-SIEGE.}
+	
+	
+	% ---------------- CONTRIBUTIONS ----------------
+	\section{Répartition des contributions}
+	
+	\small
+	\begin{longtable}{p{3.1cm} p{5.6cm} p{5.6cm}}
+		\caption{Répartition des contributions.}\\
+		\hline
+		\textbf{Activités} & \textbf{NKOUMOU TJADE Grinnel Germain} & \textbf{ETOUNDI Ferdinand Le Grang} \\
+		\hline
+		\endhead
+		
+		Inventaire et DICP (TP1.1)
+		& Relevé des versions logicielles et des configurations du laboratoire.
+		& Identification des valeurs métier et des biens supports ; rédaction des justifications de la grille DICP. \\
+		\hline
+		
+		Registre des risques (TP1.2)
+		& Identification des scenarios de risque et proposition de mesures techniques adaptées au laboratoire : segmentation VLAN, ACL et VPN.
+		& Rédaction de la synthèse destinée à la direction. \\
+		\hline
+		
+		Politique de sécurité (TP1.3)
+		& Vérification de la faisabilité technique des règles et rédaction des commandes de contrôle.
+		& Rédaction et structuration des règles de sécurité ; recherche des références et exigences applicables. \\
+		\hline
+		
+		Grille de contrôle
+		& Exécution des vérifications dans le laboratoire et réalisation des captures de preuve.
+		& Contribution à la définition des contrôles et à leur cohérence avec la politique de sécurité. \\
+		\hline
+		
+		Relecture croisée
+		& Vérification de la cohérence technique du document final et contribution à la revue croisée.
+		& Relecture du contenu, des justifications et de la synthèse. \\
+		\hline
+		
+		Gestion du dépôt Git
+		& Initialisation et structuration du dépôt, gestion des versions et intégration des livrables.
+		& Contribution à la vérification des éléments du dépôt. \\
+		
+	\hline
+	\end{longtable}
+	\normalsize
+	
+\end{document}

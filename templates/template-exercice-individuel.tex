@@ -1,0 +1,93 @@
+% EXERCICE INDIVIDUEL — rendre le raisonnement et les preuves faciles à suivre.
+% Copier dans le dossier du devoir ; remplacer les champs [entre crochets].
+\documentclass[11pt,a4paper]{article}
+
+\newcommand{\chargerpreambule}[1]{%
+  \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
+  \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
+  \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
+\chargerpreambule{preamble-commun.tex}
+\chargerpreambule{preamble-exercice-individuel.tex}
+\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+\begin{document}
+
+\fairepagegarde{Exercice individuel}{[Titre du travail]}%
+  {[Sujet, texte de référence ou compétence travaillée]}%
+  {[Prénom NOM — classe]}{\today}
+
+\section{Objet et périmètre}
+
+Présenter en quelques phrases la consigne, le contexte et ce qui est demandé.
+Signaler les hypothèses éventuelles : elles ne doivent pas être confondues avec
+des faits observés.
+
+\filconducteur
+
+\section{Analyse de la consigne et méthode}
+
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+  \item \textbf{Ce qu’il faut établir :} [Reformuler la question avec ses propres mots.]
+  \item \textbf{Les éléments disponibles :} [Règles, données, résultats ou documents utiles.]
+  \item \textbf{La méthode choisie :} [Étapes et raison du choix.] 
+\end{enumerate}
+
+\section{Réponses argumentées}
+
+% Réutiliser ce bloc pour chaque question ou exigence de la consigne.
+\subsection{Question 1 — [Intitulé]}
+
+\begin{blocpedagogique}{Réponse en bref}
+[Répondre explicitement à la question en une ou deux phrases.]
+\end{blocpedagogique}
+
+\textbf{Règle ou notion utile.} [Énoncer la règle applicable et la source, ou
+expliquer la notion avec des mots simples.]
+
+\methodeanalyse{Méthode ou filtre appliqué}{[commande ou filtre exact]}
+
+\textbf{Application au cas.} [Relier chaque élément du cas à la règle. Montrer
+le raisonnement, y compris les étapes qui pourraient sembler évidentes.]
+
+\textbf{Conclusion.} [Indiquer ce qui est établi, ce qui ne l’est pas et pourquoi.]
+
+\subsection{Question 2 — [Intitulé]}
+
+\begin{blocpedagogique}{Réponse en bref}
+[Conclusion directe.]
+\end{blocpedagogique}
+
+\textbf{Justification.} [Méthode, éléments retenus et explication du résultat.]
+
+\textbf{Conclusion.} [Réponse finale et éventuelle limite.]
+
+\section{Mesures ou recommandations}
+
+Pour chaque mesure, préciser le problème traité, l’action concrète, le rôle
+responsable et la manière de vérifier le résultat.
+
+\small
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.3cm} X X >{\raggedright\arraybackslash}p{2.3cm}}
+  \toprule
+  Point traité & Action proposée & Vérification attendue & Responsable / délai \\
+  \midrule
+  À compléter & [Action précise et réaliste.] & [Preuve de mise en œuvre.] & [Rôle / échéance.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+\normalsize
+
+\section{Conclusion personnelle}
+
+Résumer les réponses et les acquis principaux. Mentionner ce qui demanderait
+une vérification supplémentaire. Éviter d’ajouter de nouveaux arguments ici.
+
+\section*{Références}
+\addcontentsline{toc}{section}{Références}
+
+\begin{itemize}[leftmargin=*]
+  \item [Auteur ou organisme, titre du document, date, page ou adresse.] 
+\end{itemize}
+
+\end{document}

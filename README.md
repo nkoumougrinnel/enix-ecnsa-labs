@@ -24,7 +24,6 @@ il peut contenir :
 
 - `README.md` : présentation du travail et indications pour le consulter.
 - `rapport/` : sources LaTeX et illustrations.
-- `livrables/` : rapports finaux au format PDF.
 - `captures/` : captures réseau utilisées pour les analyses.
 - `configs/` : configurations des équipements et des services.
 - `eve-ng/` : exports du laboratoire.

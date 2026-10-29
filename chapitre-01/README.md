@@ -71,6 +71,7 @@ chapitre-01/
 ├── README.md
 ├── rapport/
 │   ├── rapport.tex
+|   ├── rapport.pdf
 │   └── images/
 │       ├── architecture.png
 │       ├── http.png
@@ -78,8 +79,6 @@ chapitre-01/
 │       ├── telnet.png
 │       ├── snmp.png
 │       └── dns.png
-├── livrables/
-│   └── rapport.pdf
 ├── captures/
 │   └── ...
 ├── configs/
@@ -166,8 +165,7 @@ Les détails et estimations d’effort figurent dans le rapport.
 
 ## Consulter les livrables
 
-- [Rapport final](livrables/rapport.pdf)
-- [Sources LaTeX](rapport/)
+- [Rapport](rapport/)
 - [Captures réseau](captures/)
 - [Configurations](configs/)
 - [Export EVE-NG](eve-ng/)

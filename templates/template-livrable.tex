@@ -1,0 +1,146 @@
+% LIVRABLE — document professionnel, traçable et proportionné au besoin.
+% Copier dans le dossier du devoir ; supprimer les sections optionnelles inutiles.
+\documentclass[11pt,a4paper]{article}
+
+\newcommand{\chargerpreambule}[1]{%
+  \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
+  \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
+  \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
+\chargerpreambule{preamble-commun.tex}
+\chargerpreambule{preamble-livrable.tex}
+\usepackage{xurl}
+\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+\newcommand{\versiondocument}{1.0}
+\newcommand{\organisationetudiee}{[Organisation ou laboratoire]}
+
+\begin{document}
+
+\fairepagegarde{Livrable de sécurité}{[Titre du livrable]}%
+  {\organisationetudiee — [objet précis du document]}%
+  {[Auteur(s) — classe]}{\today}
+
+\tableofcontents
+\newpage
+
+\section{Synthèse exécutive}
+
+\begin{blocpedagogique}{À lire en premier}
+\textbf{Objet :} [Quel besoin ce document traite-t-il ?]\\
+\textbf{Résultat principal :} [Que montre l’analyse ?]\\
+\textbf{Priorité :} [Quelle action faut-il décider ou mener d’abord ?]
+\end{blocpedagogique}
+
+Écrire cette synthèse pour une personne qui ne lira peut-être que cette page.
+Développer les preuves, les choix et les limites dans les sections suivantes.
+
+\filconducteur
+
+\section{Objet, périmètre et méthode}
+
+\subsection{Contexte et objectif}
+
+[Présenter le besoin, l’objectif du document et le résultat attendu. Expliquer
+les termes importants à leur première utilisation.]
+
+\subsection{Périmètre}
+
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.2cm} X}
+  \toprule
+  Élément & Description \\
+  \midrule
+  Inclus & [Systèmes, services, personnes, sites, dates ou données couverts.] \\
+  Hors périmètre & [Éléments exclus et justification.] \\
+  Cadre / autorisation & [Environnement de test et limites autorisées.] \\
+  Sources & [Documents, captures, commandes ou entretiens utilisés.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+
+\subsection{Démarche}
+
+[Décrire les étapes dans l’ordre : collecte, analyse, vérification, classement.
+Indiquer les outils utiles et les choix méthodologiques.]
+
+\section{Résultats en bref}
+
+\small
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.1cm} X X >{\raggedright\arraybackslash}p{2.3cm}}
+  \toprule
+  ID / priorité & Constat vérifié & Conséquence possible & Suite proposée \\
+  \midrule
+  C-01 / élevée & [Fait observé et vérifiable.] & [Impact formulé simplement.] & [Action prioritaire.] \\
+  C-02 / modérée & [Fait observé.] & [Impact possible.] & [Action ou vérification.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+\normalsize
+
+\section{Constats détaillés et preuves}
+
+% Réutiliser ce bloc pour chaque constat important. Séparer observation et analyse.
+\subsection{C-01 — [Titre factuel du constat]}
+
+\textbf{Observation.} [Décrire le fait mesuré, vu ou trouvé. Éviter les
+interprétations dans cette phrase.]
+
+\textbf{Preuve.} [Référence précise à une capture, un tableau, un fichier,
+une commande ou une source. Vérifier que la preuve est lisible et expurgée.]
+
+\textbf{Explication.} [Dire en termes simples ce que montre la preuve, pourquoi
+c’est important et quel actif ou besoin est concerné.]
+
+\textbf{Risque ou impact.} [Décrire un scénario plausible, ses conséquences
+et, si utile, les conditions nécessaires. Ne pas présenter une hypothèse
+comme un fait.]
+
+\textbf{Limite.} [Indiquer ce que le travail ne permet pas de confirmer.]
+
+\captureanalyse{fig:preuve-1}{images/preuve-1.png}%
+  {[Filtre Wireshark, commande ou méthode exacte]}%
+  {[La légende dit précisément ce que la preuve établit.]}
+
+\section{Recommandations et plan d’action}
+
+Une bonne recommandation répond à un constat identifié, nomme une action
+réalisable et indique comment vérifier qu’elle a fonctionné.
+
+\small
+\tableauECNSA
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.4cm} X X >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{1.8cm}}
+  \toprule
+  Priorité & Action et résultat attendu & Vérification / preuve & Responsable & Échéance \\
+  \midrule
+  P1 & [Action liée à C-01.] & [Contrôle observable.] & [Rôle.] & [Date / délai.] \\
+  P2 & [Action liée à C-02.] & [Contrôle observable.] & [Rôle.] & [Date / délai.] \\
+  \bottomrule
+\end{tabularx}
+\fintableauECNSA
+\normalsize
+
+\section{Limites et suites}
+
+[Documenter les données manquantes, les vérifications non réalisées et les
+prochaines étapes qui permettraient d’améliorer ou de confirmer les résultats.]
+
+\section{Conclusion}
+
+[Rappeler le résultat, les priorités et les décisions attendues. La conclusion
+ne doit pas introduire de nouvelle preuve.]
+
+\section*{Références}
+\addcontentsline{toc}{section}{Références}
+
+\begin{itemize}[leftmargin=*]
+  \item [Auteur ou organisme, titre, version ou date, page ou adresse.] 
+\end{itemize}
+
+\appendix
+\section{Annexes (facultatif)}
+
+[Ajouter uniquement les éléments utiles à la vérification : extraits de
+configuration expurgés, tableaux détaillés, glossaire ou preuves complémentaires.]
+
+\end{document}
