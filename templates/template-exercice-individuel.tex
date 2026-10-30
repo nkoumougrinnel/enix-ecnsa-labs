@@ -1,93 +1,114 @@
-% EXERCICE INDIVIDUEL — rendre le raisonnement et les preuves faciles à suivre.
-% Copier dans le dossier du devoir ; remplacer les champs [entre crochets].
-\documentclass[11pt,a4paper]{article}
+% ================================================================
+% EXERCICE INDIVIDUEL — ECNSA
+% Structure calquée sur exercice_individuel.tex du Chap2.
+%
+% UTILISATION :
+%   1. Copier ce fichier dans le dossier du devoir.
+%   2. Remplacer TOUS les champs [entre crochets].
+%   3. Compiler avec pdflatex (une seule passe suffit).
+%
+% LIMITE : ~5 pages. Pas de fancyhdr, numéro de page en bas centré.
+% Police 10pt et marges compactes pour maximiser l'espace disponible.
+% ================================================================
+\documentclass[a4paper,10pt]{article}
 
+% Chargement du préambule — cherche le fichier dans plusieurs chemins
+% relatifs pour fonctionner depuis n'importe quel sous-dossier du projet.
 \newcommand{\chargerpreambule}[1]{%
   \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
   \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
   \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
 \chargerpreambule{preamble-commun.tex}
 \chargerpreambule{preamble-exercice-individuel.tex}
-\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+% ----------------------------------------------------------------
+% MÉTADONNÉES — à personnaliser
+% ----------------------------------------------------------------
+\title{\textbf{Exercice individuel : [titre]}}
+\author{[Prénom NOM]\\ Classe : [classe]}
+\date{[date]}     % ou \date{\today} pour la date du jour
 
 \begin{document}
+  \maketitle
 
-\fairepagegarde{Exercice individuel}{[Titre du travail]}%
-  {[Sujet, texte de référence ou compétence travaillée]}%
-  {[Prénom NOM — classe]}{\today}
+  % ================================================================
+  % SECTION 1 — Objet et périmètre (toujours présente)
+  % ================================================================
+  \section{Objet et périmètre}
 
-\section{Objet et périmètre}
+  [Présenter la consigne, le contexte réglementaire ou technique, et le périmètre
+  de l'analyse. Préciser les hypothèses retenues si nécessaire.]
 
-Présenter en quelques phrases la consigne, le contexte et ce qui est demandé.
-Signaler les hypothèses éventuelles : elles ne doivent pas être confondues avec
-des faits observés.
+  % ================================================================
+  % SECTION 2 — Premier thème : obligations et écarts
+  % Renommer le titre selon l'énoncé.
+  % ================================================================
+  \section{[Thème 1 — ex. Obligations applicables et écarts constatés]}
 
-\filconducteur
+  % Dupliquer les blocs \subsection pour chaque obligation à examiner.
 
-\section{Analyse de la consigne et méthode}
+  \subsection{[Sous-thème 1]}
 
-\begin{enumerate}[leftmargin=*,itemsep=3pt]
-  \item \textbf{Ce qu’il faut établir :} [Reformuler la question avec ses propres mots.]
-  \item \textbf{Les éléments disponibles :} [Règles, données, résultats ou documents utiles.]
-  \item \textbf{La méthode choisie :} [Étapes et raison du choix.] 
-\end{enumerate}
+  \textbf{Obligation.} [Énoncer la règle ou l'obligation applicable.]
 
-\section{Réponses argumentées}
+  \textbf{Constat.} [Décrire la situation observée et l'écart par rapport
+  à l'obligation. Rester factuel.]
 
-% Réutiliser ce bloc pour chaque question ou exigence de la consigne.
-\subsection{Question 1 — [Intitulé]}
+  \subsection{[Sous-thème 2]}
 
-\begin{blocpedagogique}{Réponse en bref}
-[Répondre explicitement à la question en une ou deux phrases.]
-\end{blocpedagogique}
+  \textbf{Obligation.} [Énoncer la règle ou l'obligation applicable.]
 
-\textbf{Règle ou notion utile.} [Énoncer la règle applicable et la source, ou
-expliquer la notion avec des mots simples.]
+  \textbf{Constat.} [Décrire la situation observée et l'écart.]
 
-\methodeanalyse{Méthode ou filtre appliqué}{[commande ou filtre exact]}
+  \subsection{[Sous-thème 3]}
 
-\textbf{Application au cas.} [Relier chaque élément du cas à la règle. Montrer
-le raisonnement, y compris les étapes qui pourraient sembler évidentes.]
+  \textbf{Obligation.} [Énoncer la règle ou l'obligation applicable.]
 
-\textbf{Conclusion.} [Indiquer ce qui est établi, ce qui ne l’est pas et pourquoi.]
+  \textbf{Constat.} [Décrire la situation observée et l'écart.]
 
-\subsection{Question 2 — [Intitulé]}
+  % ================================================================
+  % SECTION 3 — Deuxième thème : mesures de mise en conformité
+  % ================================================================
+  \section{[Thème 2 — ex. Mesures de mise en conformité]}
 
-\begin{blocpedagogique}{Réponse en bref}
-[Conclusion directe.]
-\end{blocpedagogique}
+  % Dupliquer les blocs \subsection pour chaque mesure supplémentaire.
 
-\textbf{Justification.} [Méthode, éléments retenus et explication du résultat.]
+  \subsection{Mesure 1 : [intitulé]}
 
-\textbf{Conclusion.} [Réponse finale et éventuelle limite.]
+  \textbf{Règle.} [Énoncer la règle ou l'exigence à respecter.]
 
-\section{Mesures ou recommandations}
+  \textbf{Mise en œuvre.} [Décrire les actions concrètes et les acteurs responsables.]
 
-Pour chaque mesure, préciser le problème traité, l’action concrète, le rôle
-responsable et la manière de vérifier le résultat.
+  \textbf{Preuve.} [Indiquer les documents, journaux ou résultats permettant
+  de vérifier que la mesure est appliquée.]
 
-\small
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{2.3cm} X X >{\raggedright\arraybackslash}p{2.3cm}}
-  \toprule
-  Point traité & Action proposée & Vérification attendue & Responsable / délai \\
-  \midrule
-  À compléter & [Action précise et réaliste.] & [Preuve de mise en œuvre.] & [Rôle / échéance.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
-\normalsize
+  \subsection{Mesure 2 : [intitulé]}
 
-\section{Conclusion personnelle}
+  \textbf{Règle.} [Règle applicable.]
 
-Résumer les réponses et les acquis principaux. Mentionner ce qui demanderait
-une vérification supplémentaire. Éviter d’ajouter de nouveaux arguments ici.
+  \textbf{Mise en œuvre.} [Actions concrètes et responsables.]
 
-\section*{Références}
-\addcontentsline{toc}{section}{Références}
+  \textbf{Preuve.} [Documents ou résultats de vérification.]
 
-\begin{itemize}[leftmargin=*]
-  \item [Auteur ou organisme, titre du document, date, page ou adresse.] 
-\end{itemize}
+  % ================================================================
+  % SECTION 4 — Tableau de synthèse (toujours présent en conclusion)
+  % Une ligne par obligation / mesure identifiée ci-dessus.
+  % ================================================================
+  \section{Responsable et preuve de la mise en œuvre}
+
+  \begin{table}[h]
+    \centering
+    \small
+    \begin{tabularx}{\textwidth}{@{}XXXX@{}}
+      \toprule
+      \textbf{Obligation} & \textbf{Mesure} & \textbf{Responsable} & \textbf{Preuve} \\
+      \midrule
+      [Obligation 1] & M1 : [intitulé court] & [Rôle(s)] & [Preuve attendue] \\
+      [Obligation 2] & M2 : [intitulé court] & [Rôle(s)] & [Preuve attendue] \\
+      [Obligation 3] & M3 : [intitulé court] & [Rôle(s)] & [Preuve attendue] \\
+      % Ajouter une ligne par obligation supplémentaire.
+      \bottomrule
+    \end{tabularx}
+  \end{table}
 
 \end{document}

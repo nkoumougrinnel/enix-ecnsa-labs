@@ -1,146 +1,273 @@
-% LIVRABLE — document professionnel, traçable et proportionné au besoin.
-% Copier dans le dossier du devoir ; supprimer les sections optionnelles inutiles.
+% ================================================================
+% LIVRABLE / RAPPORT DE SÉCURITÉ — ECNSA
+% Structure calquée sur rapport.tex du Chap1 (référence).
+%
+% UTILISATION :
+%   1. Copier ce fichier dans le dossier du devoir (ex. chapitre-0X/rapport/).
+%   2. Remplacer TOUS les champs [entre crochets].
+%   3. Compiler avec pdflatex (deux passes si \tableofcontents est actif).
+%
+% LIMITE : aucune limite de pages.
+% fancyhdr actif : en-tête avec scénario à gauche, ECNSA à droite.
+% hyperref actif : liens PDF cliquables (URLs, références internes).
+% ================================================================
 \documentclass[11pt,a4paper]{article}
 
+% Chargement du préambule — cherche le fichier dans plusieurs chemins
+% relatifs pour fonctionner depuis n'importe quel sous-dossier du projet.
 \newcommand{\chargerpreambule}[1]{%
   \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
   \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
   \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
 \chargerpreambule{preamble-commun.tex}
-\chargerpreambule{preamble-livrable.tex}
-\usepackage{xurl}
-\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+\chargerpreambule{preamble-livrable.tex}   % charge fancyhdr + hyperref
 
-\newcommand{\versiondocument}{1.0}
-\newcommand{\organisationetudiee}{[Organisation ou laboratoire]}
+% longtable : tableaux qui s'étalent sur plusieurs pages (grands inventaires).
+\usepackage{longtable}
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{4pt}
+
+% ----------------------------------------------------------------
+% EN-TÊTE FANCYHDR — personnaliser les deux champs ci-dessous.
+% Modèle Chap1 : nom du scénario/client à gauche, ECNSA à droite.
+% ----------------------------------------------------------------
+\fancyhf{}                              % effacer les valeurs par défaut
+\fancyhead[L]{[Nom du scénario / client]}
+\fancyhead[R]{ECNSA}
+\fancyfoot[C]{\thepage}                 % numéro de page centré en bas
 
 \begin{document}
 
-\fairepagegarde{Livrable de sécurité}{[Titre du livrable]}%
-  {\organisationetudiee — [objet précis du document]}%
-  {[Auteur(s) — classe]}{\today}
+% ================================================================
+% PAGE DE GARDE
+% Centrée verticalement sur la page, sans en-tête ni pied.
+% ================================================================
+\thispagestyle{empty}
+\null\vfill
+\begin{center}
 
-\tableofcontents
+  % Logo (facultatif) : déposer images/logo.png pour l'activer.
+  \IfFileExists{images/logo.png}{%
+    \includegraphics[width=4cm]{images/logo.png}\\[1.5em]%
+  }{}
+
+  % Titre principal du rapport.
+  {\LARGE\bfseries [Titre du rapport de sécurité]}\\[0.6em]
+  {\large [Sous-titre : contexte ou système analysé]}\\[2.5em]
+
+  % Auteur(s).
+  % Un seul auteur : remplacer le tabular par \normalsize [Prénom NOM]
+  % Plusieurs auteurs : ajouter des colonnes c dans le tabular.
+  \begin{tabular}{c@{\hspace{1.5cm}}c}
+    \normalsize [Prénom NOM 1] & \normalsize [Prénom NOM 2] \\[0.3em]
+    \multicolumn{2}{c}{\small Classe : [classe]}              \\[0.2em]
+    \multicolumn{2}{c}{\small Dépôt : \href{[URL du dépôt Git]}{[URL courte affichée]}}
+  \end{tabular}\\[2.5em]
+
+  {\small \today}   % ou remplacer \today par la date souhaitée
+
+\end{center}
+\vfill\vfill
 \newpage
 
-\section{Synthèse exécutive}
+% ================================================================
+% TABLE DES MATIÈRES
+% Décommenter les deux lignes ci-dessous si le rapport dépasse
+% 6-7 sections. Compiler deux fois pour la mettre à jour.
+% ================================================================
+% \tableofcontents
+% \newpage
 
-\begin{blocpedagogique}{À lire en premier}
-\textbf{Objet :} [Quel besoin ce document traite-t-il ?]\\
-\textbf{Résultat principal :} [Que montre l’analyse ?]\\
-\textbf{Priorité :} [Quelle action faut-il décider ou mener d’abord ?]
-\end{blocpedagogique}
+% ================================================================
+% SECTION 1 — Résumé pour la direction (toujours en premier)
+% Prose uniquement, pas de tableau. Accessible à un lecteur non technique.
+% ================================================================
+\section{Résumé pour la direction}
 
-Écrire cette synthèse pour une personne qui ne lira peut-être que cette page.
-Développer les preuves, les choix et les limites dans les sections suivantes.
+[En quelques phrases : périmètre analysé, principaux constats (nombre,
+nature), niveau de risque global et priorité d'action retenue.
+Cette section s'adresse à un lecteur non technique.]
 
-\filconducteur
+% ================================================================
+% SECTION 2 — Périmètre et autorisation
+% ================================================================
+\section{Périmètre et autorisation}
 
-\section{Objet, périmètre et méthode}
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\linewidth}{>{\bfseries}p{3.6cm}Y}
+    \toprule
+    Élément & Description \\
+    \midrule
 
-\subsection{Contexte et objectif}
+    Environnement &
+    [Décrire l'environnement : laboratoire, production, VM, topologie.] \\
 
-[Présenter le besoin, l’objectif du document et le résultat attendu. Expliquer
-les termes importants à leur première utilisation.]
+    Périmètre &
+    [Réseaux, équipements et services inclus dans l'analyse.] \\
 
-\subsection{Périmètre}
+    Hors périmètre &
+    [Équipements ou réseaux explicitement exclus et raison.] \\
 
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{3.2cm} X}
-  \toprule
-  Élément & Description \\
-  \midrule
-  Inclus & [Systèmes, services, personnes, sites, dates ou données couverts.] \\
-  Hors périmètre & [Éléments exclus et justification.] \\
-  Cadre / autorisation & [Environnement de test et limites autorisées.] \\
-  Sources & [Documents, captures, commandes ou entretiens utilisés.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
+    Type de test &
+    [Observation passive, scan actif, test d'intrusion, audit de config…] \\
 
-\subsection{Démarche}
+    Date &
+    [date de réalisation]. \\
 
-[Décrire les étapes dans l’ordre : collecte, analyse, vérification, classement.
-Indiquer les outils utiles et les choix méthodologiques.]
+    Autorisation &
+    [Cadre légal ou pédagogique dans lequel les tests ont été réalisés.] \\
 
-\section{Résultats en bref}
+    \bottomrule
+  \end{tabularx}
+  \caption{Périmètre et cadre de réalisation des tests}
+\end{table}
 
-\small
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{2.1cm} X X >{\raggedright\arraybackslash}p{2.3cm}}
-  \toprule
-  ID / priorité & Constat vérifié & Conséquence possible & Suite proposée \\
-  \midrule
-  C-01 / élevée & [Fait observé et vérifiable.] & [Impact formulé simplement.] & [Action prioritaire.] \\
-  C-02 / modérée & [Fait observé.] & [Impact possible.] & [Action ou vérification.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
-\normalsize
+\subsection*{Outils utilisés}
 
-\section{Constats détaillés et preuves}
+\begin{table}[H]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\linewidth}{
+      >{\raggedright\arraybackslash\bfseries}p{3.6cm}
+      >{\raggedright\arraybackslash}X
+    }
+    \toprule
+    Outil & Utilisation dans le laboratoire \\
+    \midrule
 
-% Réutiliser ce bloc pour chaque constat important. Séparer observation et analyse.
-\subsection{C-01 — [Titre factuel du constat]}
+    [Outil 1] & [Rôle dans le laboratoire ou la mission.] \\
+    [Outil 2] & [Rôle dans le laboratoire ou la mission.] \\
+    [Outil 3] & [Rôle dans le laboratoire ou la mission.] \\
+    % Ajouter une ligne par outil supplémentaire.
 
-\textbf{Observation.} [Décrire le fait mesuré, vu ou trouvé. Éviter les
-interprétations dans cette phrase.]
+    \bottomrule
+  \end{tabularx}
+  \caption{Outils et environnements utilisés}
+  \label{tab:outils}
+\end{table}
 
-\textbf{Preuve.} [Référence précise à une capture, un tableau, un fichier,
-une commande ou une source. Vérifier que la preuve est lisible et expurgée.]
+% ================================================================
+% SECTION 3 — Constats
+% Un bloc \midrule + ligne par constat. Dupliquer autant que nécessaire.
+% Si la liste est très longue (> 15 entrées), remplacer table par longtable.
+% ================================================================
+\section{Constats}
 
-\textbf{Explication.} [Dire en termes simples ce que montre la preuve, pourquoi
-c’est important et quel actif ou besoin est concerné.]
+\begin{table}[H]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabularx}{\linewidth}{
+      >{\raggedright\arraybackslash}p{2.6cm}
+      >{\raggedright\arraybackslash}X
+      >{\raggedright\arraybackslash}p{2.7cm}
+      >{\raggedright\arraybackslash}p{1.8cm}
+    }
+    \toprule
+    Service / protocole &
+    Observation dans les captures &
+    Remédiation proposée &
+    Effort indicatif \\
+    \midrule
 
-\textbf{Risque ou impact.} [Décrire un scénario plausible, ses conséquences
-et, si utile, les conditions nécessaires. Ne pas présenter une hypothèse
-comme un fait.]
+    [Service 1]\newline [protocole, port] &
+    [Décrire précisément le fait observé : ce qui est visible, récupérable
+    ou exposé dans la capture ou l'analyse.] &
+    [Mesure corrective concrète.] &
+    [1 jour / 2 jours…] \\
 
-\textbf{Limite.} [Indiquer ce que le travail ne permet pas de confirmer.]
+    \midrule
 
-\captureanalyse{fig:preuve-1}{images/preuve-1.png}%
-  {[Filtre Wireshark, commande ou méthode exacte]}%
-  {[La légende dit précisément ce que la preuve établit.]}
+    [Service 2]\newline [protocole, port] &
+    [Observation factuelle.] &
+    [Remédiation.] &
+    [Effort.] \\
 
-\section{Recommandations et plan d’action}
+    % Ajouter un bloc \midrule + ligne par constat supplémentaire.
 
-Une bonne recommandation répond à un constat identifié, nomme une action
-réalisable et indique comment vérifier qu’elle a fonctionné.
+    \bottomrule
+  \end{tabularx}
+  \caption{Synthèse des constats et des remédiations proposées}
+  \label{tab:constats}
+\end{table}
 
-\small
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{1.4cm} X X >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{1.8cm}}
-  \toprule
-  Priorité & Action et résultat attendu & Vérification / preuve & Responsable & Échéance \\
-  \midrule
-  P1 & [Action liée à C-01.] & [Contrôle observable.] & [Rôle.] & [Date / délai.] \\
-  P2 & [Action liée à C-02.] & [Contrôle observable.] & [Rôle.] & [Date / délai.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
-\normalsize
+\subsection*{Preuves}
 
-\section{Limites et suites}
+% Bloc capture à dupliquer pour chaque constat illustré par une image.
+% Si l'image n'existe pas encore, un cadre de substitution s'affiche.
+\begin{figure}[H]
+  \centering
+  \IfFileExists{images/capture-1.png}{%
+    \includegraphics[width=0.8\linewidth]{images/capture-1.png}%
+  }{%
+    \fbox{\parbox{0.78\linewidth}{\centering Capture à insérer :
+      \texttt{images/capture-1.png}}}%
+  }
+  \caption{[Décrire ce que la capture montre et pourquoi c'est significatif.
+  Flouter les données sensibles.]}
+\end{figure}
 
-[Documenter les données manquantes, les vérifications non réalisées et les
-prochaines étapes qui permettraient d’améliorer ou de confirmer les résultats.]
+% ================================================================
+% SECTION 4 — Plan d'action
+% Un bloc \midrule + ligne par service. Dupliquer autant que nécessaire.
+% ================================================================
+\section{Plan d'action}
 
-\section{Conclusion}
+\begin{table}[H]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabularx}{\linewidth}{
+      >{\raggedright\arraybackslash\bfseries}p{1.3cm}
+      >{\raggedright\arraybackslash}X
+      >{\raggedright\arraybackslash}X
+      >{\raggedright\arraybackslash}p{1.8cm}
+      >{\raggedright\arraybackslash}p{1.8cm}
+    }
+    \toprule
+    Service &
+    Risque constaté &
+    Correction proposée &
+    Effort indicatif &
+    Module du cours \\
+    \midrule
 
-[Rappeler le résultat, les priorités et les décisions attendues. La conclusion
-ne doit pas introduire de nouvelle preuve.]
+    [Service 1] &
+    [Risque en une phrase : qui peut faire quoi, dans quelles conditions.] &
+    [Étapes concrètes de correction. Inclure la validation avant désactivation
+    de l'ancien service.] &
+    [1 jour] &
+    [référence] \\
 
-\section*{Références}
-\addcontentsline{toc}{section}{Références}
+    \midrule
 
-\begin{itemize}[leftmargin=*]
-  \item [Auteur ou organisme, titre, version ou date, page ou adresse.] 
+    [Service 2] &
+    [Risque.] &
+    [Correction.] &
+    [Effort.] &
+    [Module.] \\
+
+    % Ajouter un bloc \midrule + ligne par service supplémentaire.
+
+    \bottomrule
+  \end{tabularx}
+  \caption{Plan d'action proposé à partir des constats}
+  \label{tab:plan-action}
+\end{table}
+
+% ================================================================
+% SECTION 5 — Annexes (facultatif)
+% Lister les fichiers joints ou les références externes.
+% Supprimer cette section si le rapport n'a pas d'annexes.
+% ================================================================
+\section{Annexes}
+
+\begin{itemize}
+  \item [Configurations finales des équipements (dossier \texttt{configs/}).]
+  \item [Fichiers de capture réseau (\texttt{captures/}).]
+  \item [Tout autre document joint : schéma, export de scan, etc.]
 \end{itemize}
-
-\appendix
-\section{Annexes (facultatif)}
-
-[Ajouter uniquement les éléments utiles à la vérification : extraits de
-configuration expurgés, tableaux détaillés, glossaire ou preuves complémentaires.]
 
 \end{document}

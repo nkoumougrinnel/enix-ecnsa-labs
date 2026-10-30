@@ -1,56 +1,85 @@
-% MINI-ÉVALUATION — réponse courte, démontrée et facile à relire.
-% Copier ce fichier dans le dossier du devoir, puis remplacer les champs [entre crochets].
+% ================================================================
+% MINI-ÉVALUATION — ECNSA
+% Structure calquée sur minievaluation.tex du Chap2.
+%
+% UTILISATION :
+%   1. Copier ce fichier dans le dossier du devoir.
+%   2. Remplacer TOUS les champs [entre crochets].
+%   3. Compiler avec pdflatex (pas de bibliographie = une seule passe suffit).
+%
+% LIMITE : ~5 pages. Pas de fancyhdr, numéro de page en bas centré.
+% ================================================================
 \documentclass[11pt,a4paper]{article}
 
+% Chargement du préambule — cherche le fichier dans plusieurs chemins
+% relatifs pour fonctionner depuis n'importe quel sous-dossier du projet.
 \newcommand{\chargerpreambule}[1]{%
   \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
   \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
   \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
 \chargerpreambule{preamble-commun.tex}
 \chargerpreambule{preamble-mini-evaluation.tex}
-\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+% ----------------------------------------------------------------
+% MÉTADONNÉES — à personnaliser
+% ----------------------------------------------------------------
+\title{\textbf{Mini-évaluation pratique\\{}[Titre du devoir]}}
+\author{[Prénom NOM]\\ Classe : [classe]}
+\date{[date]}     % ou \date{\today} pour la date du jour
 
 \begin{document}
 
-\faireentetecourte{Mini-évaluation pratique}{[Titre du devoir]}%
-  {[Prénom NOM — classe]}{\today}
+  \maketitle
+  \thispagestyle{empty}   % pas de numéro sur la page de titre
 
-% Document court : pas de sommaire. Commencer par répondre, puis démontrer.
-\filconducteur
+  % ================================================================
+  % SECTION 1 — Première question ou premier thème
+  % Renommer le titre selon l'énoncé.
+  % ================================================================
+  \section{[Besoin / Question 1]}
 
-\section{Question 1 — [Reprendre le sujet en quelques mots]}
+  [Contexte ou énoncé de la question.]
 
-\begin{blocpedagogique}{Réponse directe}
-Répondre d’abord en une ou deux phrases. Le lecteur doit comprendre la conclusion
-avant de lire les détails.
-\end{blocpedagogique}
+  \subsection{[Sous-partie 1]}
 
-\textbf{Démarche.} Expliquer l’opération réalisée et pourquoi elle répond à la
-question. Donner la commande ou le filtre utilisé, puis expliquer les éléments
-importants de son résultat.
+  \begin{itemize}
+    \item \textbf{[Point clé :]} [explication].
+    \item \textbf{[Point clé :]} [explication].
+  \end{itemize}
 
-\begin{blocpedagogique}{Commande ou filtre utilisé}
-\texttt{[commande, filtre Wireshark ou méthode — remplacer cet exemple]}
-\end{blocpedagogique}
+  \subsection{[Sous-partie 2]}
 
-% Ajouter une preuve seulement si elle aide à vérifier l'explication.
-\captureanalyse{fig:preuve-1}{captures/capture-1.png}%
-  {udp.port == 53}{[Dire ce que la capture prouve et dans quel contexte.]}
+  \begin{itemize}
+    \item \textbf{[Point clé :]} [explication].
+  \end{itemize}
 
-\textbf{Interprétation.} Expliquer ce que cette observation signifie et répondre
-explicitement à la question. Si une limite empêche de conclure, la signaler.
+  % Dupliquer les blocs \subsection pour chaque sous-partie supplémentaire.
 
-\section{Question 2 — [Intitulé]}
+  % \newpage   % décommenter si la section suivante doit commencer sur une nouvelle page
 
-\textbf{Réponse.} [Réponse courte et précise.]
+  % ================================================================
+  % SECTION 2 — Deuxième question ou deuxième thème
+  % ================================================================
+  \section{[Règles de politique / Question 2]}
 
-\textbf{Justification.} [Étapes suivies et raison du choix de la méthode.]
+  \subsection{[Règle 1] --- [Intitulé]}
 
-\textbf{Résultat observé.} [Valeurs utiles, contexte et unité si nécessaire.]
+  \begin{itemize}
+    \item \textbf{Énoncé :} [Décrire la règle ou l'exigence.]
+    \item \textbf{Périmètre :} [Systèmes, réseaux ou actifs concernés.]
+    \item \textbf{Mesure technique :} [Action à mettre en œuvre.]
+    \item \textbf{Preuve de contrôle :} [Comment vérifier que la mesure est en place.]
+  \end{itemize}
 
-\section{Synthèse}
+  \subsection{[Règle 2] --- [Intitulé]}
 
-En quelques lignes : rappeler les réponses principales, ce qui a été démontré
-et, s’il y a lieu, le point qui reste à vérifier.
+  \begin{itemize}
+    \item \textbf{Énoncé :} [Décrire la règle ou l'exigence.]
+    \item \textbf{Périmètre :} [Systèmes, réseaux ou actifs concernés.]
+    \item \textbf{Mesure technique :} [Action à mettre en œuvre.]
+    \item \textbf{Preuve de contrôle :} [Comment vérifier que la mesure est en place.]
+  \end{itemize}
+
+  % Dupliquer le bloc \subsection ci-dessus pour chaque règle supplémentaire.
 
 \end{document}

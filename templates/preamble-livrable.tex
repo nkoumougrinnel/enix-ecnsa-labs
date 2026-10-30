@@ -1,2 +1,21 @@
-% Profil livrable : marges plus généreuses et espacement confortable pour un rapport long.
-\profillivrable
+% Profil livrable — correspond à rapport.tex du Chap1 (référence).
+% Marges 2.2 cm, fancyhdr actif (justifié pour un document long), parskip 0.5em.
+
+% Marges identiques à l'original Chap1.
+\geometry{a4paper, margin=2.2cm}
+
+% Espacement entre paragraphes.
+\setlength{\parskip}{0.5em}
+
+% Hauteur des lignes de tableau.
+\renewcommand{\arraystretch}{1.25}
+
+% fancyhdr — headheight via \setlength pour ne pas perturber \textwidth.
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt}   % ligne sous l'en-tête
+\renewcommand{\footrulewidth}{0pt}     % pas de ligne au pied
+
+% hyperref est déjà chargé par le préambule commun : on règle seulement les couleurs.
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black}

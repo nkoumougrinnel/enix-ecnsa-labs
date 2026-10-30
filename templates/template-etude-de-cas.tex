@@ -1,128 +1,146 @@
-% ÉTUDE DE CAS — analyser une situation, expliquer les risques et proposer un plan.
-% Copier dans le dossier du devoir ; remplacer les champs [entre crochets].
-\documentclass[11pt,a4paper]{article}
+% ================================================================
+% ÉTUDE DE CAS — ECNSA
+% Structure calquée sur etude_cas.tex du Chap2.
+%
+% UTILISATION :
+%   1. Copier ce fichier dans le dossier du devoir.
+%   2. Remplacer TOUS les champs [entre crochets].
+%   3. Compiler avec pdflatex (une seule passe suffit).
+%
+% LIMITE : ~2 pages. Pas de fancyhdr, numéro de page en bas centré.
+% Les sections sont numérotées manuellement (section*) pour coller
+% à l'original — plus de contrôle sur l'affichage.
+% ================================================================
+\documentclass[a4paper,11pt]{article}
 
+% Chargement du préambule — cherche le fichier dans plusieurs chemins
+% relatifs pour fonctionner depuis n'importe quel sous-dossier du projet.
 \newcommand{\chargerpreambule}[1]{%
   \IfFileExists{../../templates/#1}{\input{../../templates/#1}}{%
   \IfFileExists{../templates/#1}{\input{../templates/#1}}{%
   \IfFileExists{templates/#1}{\input{templates/#1}}{\input{#1}}}}}
 \chargerpreambule{preamble-commun.tex}
 \chargerpreambule{preamble-etude-de-cas.tex}
-\contextedevoir{ACX401.1 — ECNSA}{Chapitre [numéro] — [intitulé]}
+
+% ----------------------------------------------------------------
+% MÉTADONNÉES — à personnaliser
+% ----------------------------------------------------------------
+\title{\textbf{Étude de cas : [sujet de l'étude]}}
+\author{[Prénom NOM]\\ Classe : [classe]}
+\date{[date]}     % ou \date{\today} pour la date du jour
 
 \begin{document}
 
-\fairepagegarde{Étude de cas}{[Titre de l’étude]}%
-  {[Organisation, système ou situation étudiée]}%
-  {[Prénom NOM — classe]}{\today}
+  \maketitle
 
-\tableofcontents
-\newpage
+  % Introduction générale : 2-3 phrases maximum.
+  [Présentation brève : contexte de l'étude, objectif de l'analyse et organisation
+  du document.]
 
-\section{Résumé de l’étude}
+  % ================================================================
+  % SECTION 1 — ex. Classement et priorisation des constats
+  % Renommer le titre selon l'énoncé.
+  % ================================================================
+  \section*{1. [Premier axe — ex. Classement des constats]}
 
-En quelques lignes, donner le sujet, les deux ou trois constats majeurs, leur
-importance et la décision ou l’action prioritaire. Cette partie s’écrit souvent
-en dernier : elle doit résumer ce que le document démontre.
+  [Introduction de la section.]
 
-\filconducteur
+  \small
+  \begin{tabularx}{\textwidth}{
+      >{\raggedright\arraybackslash}p{2cm}
+      >{\centering\arraybackslash}p{1.8cm}
+      X}
+    \toprule
+    \textbf{Niveau} & \textbf{Constats} & \textbf{Justification par le risque} \\
+    \midrule
 
-\section{Contexte et périmètre}
+    \textbf{Critique} & [nos] &
+    \textbf{([n])} [Décrire le risque associé au constat.] \\
 
-\subsection{Situation étudiée}
+    \midrule
+    \textbf{Important} & [nos] &
+    \textbf{([n])} [Décrire le risque associé au constat.] \\
 
-[Présenter l’organisation fictive ou réelle, le besoin et les éléments utiles
-pour comprendre le cas. Définir les termes techniques peu courants.]
+    \midrule
+    \textbf{À planifier} & [nos] &
+    \textbf{([n])} [Décrire le risque associé au constat.] \\
 
-\subsection{Périmètre et limites}
+    \bottomrule
+  \end{tabularx}
+  \normalsize
 
-\begin{tabularx}{\linewidth}{>{\bfseries}p{3.2cm} X}
-  \toprule
-  Élément & Description \\
-  \midrule
-  Inclus & [Équipements, services, période, données ou processus examinés.] \\
-  Hors périmètre & [Éléments non examinés et raison de leur exclusion.] \\
-  Sources & [Documents, captures, entretiens ou commandes utilisés.] \\
-  Limites & [Ce qui manque pour conclure avec certitude.] \\
-  \bottomrule
-\end{tabularx}
+  % ================================================================
+  % SECTION 2 — ex. Scénarios de risques
+  % ================================================================
+  \section*{2. [Deuxième axe — ex. Scénarios de risques]}
 
-\subsection{Méthode suivie}
+  [Introduction de la section.]
 
-Décrire les étapes dans l’ordre et justifier brièvement les choix :
-\begin{enumerate}[leftmargin=*,itemsep=2pt]
-  \item [Quelle information a été recueillie, et où ?]
-  \item [Comment a-t-elle été vérifiée ou comparée ?]
-  \item [Comment les constats ont-ils été classés et priorisés ?]
-\end{enumerate}
+  \textbf{Scénario 1 : [intitulé].}
 
-\section{Constats appuyés par des preuves}
+  [Décrire la chaîne d'attaque ou le scénario de risque. Relier les constats
+  concernés et indiquer l'impact potentiel sur l'organisation.]
 
-\subsection{Constat 1 — [Intitulé factuel]}
+  \textbf{Scénario 2 : [intitulé].}
 
-\textbf{Observation.} [Décrire précisément le fait observé, sans supposer sa cause.]
+  [Décrire le scénario. Préciser les constats en cause et les conséquences
+  possibles pour les systèmes ou les données.]
 
-\textbf{Preuve.} [Citer la capture, la commande, la ligne du document ou le
-résultat permettant à un lecteur de vérifier le constat.]
+  % Dupliquer le bloc \textbf{Scénario} ci-dessus pour chaque scénario supplémentaire.
 
-\textbf{Explication.} [Traduire le résultat en langage simple : qu’est-ce qui
-se passe, et pourquoi est-ce notable ?]
+  [Phrase de transition vers le plan d'action ci-dessous.]
 
-\textbf{Limite.} [Préciser ce que cette preuve ne permet pas, à elle seule,
-d’affirmer. Écrire « aucune identifiée » si c’est pertinent.]
+  % ================================================================
+  % SECTION 3 — ex. Plan d'action sur six mois
+  % ================================================================
+  \section*{3. [Troisième axe — ex. Plan d'action sur six mois]}
 
-% Réutiliser la structure ci-dessus pour chaque constat important.
-\subsection{Constat 2 — [Intitulé factuel]}
+  [Introduction : logique d'organisation du plan (horizons, critères de
+  priorisation, contraintes de ressources).]
 
-\textbf{Observation.} [Fait mesurable ou vérifiable.]
+  \small
+  \begin{tabularx}{\textwidth}{
+      >{\raggedright\arraybackslash}p{2.7cm}
+      X}
+    \toprule
+    \textbf{Horizon} & \textbf{Actions à mener} \\
+    \midrule
 
-\textbf{Preuve et explication.} [Source, résultat puis interprétation simple.]
+    % Horizon 1 — actions immédiates ou urgentes
+    \textbf{[Horizon 1]\newline [contrainte]} &
+    \begin{minipage}[t]{\linewidth}
+      \begin{itemize}[leftmargin=*, itemsep=2pt, topsep=2pt]
+        \item [Action prioritaire 1 (référence au constat).]
+        \item [Action prioritaire 2 (référence au constat).]
+      \end{itemize}
+    \end{minipage}
+    \\
 
-\section{Risques et priorités}
+    \midrule
+    % Horizon 2 — actions à planifier à moyen terme
+    \textbf{[Horizon 2]\newline [contrainte]} &
+    \begin{minipage}[t]{\linewidth}
+      \begin{itemize}[leftmargin=*, itemsep=2pt, topsep=2pt]
+        \item [Action à planifier 1 (référence au constat).]
+        \item [Action à planifier 2 (référence au constat).]
+      \end{itemize}
+    \end{minipage}
+    \\
 
-Un constat décrit une situation observée ; un risque décrit un scénario
-possible et ses conséquences. Éviter de présenter une hypothèse comme un fait.
+    \midrule
+    % Horizon 3 — décisions ou mesures structurelles (direction)
+    \textbf{[Horizon 3]\newline [contrainte]} &
+    \begin{minipage}[t]{\linewidth}
+      \begin{itemize}[leftmargin=*, itemsep=2pt, topsep=2pt]
+        \item [Décision ou mesure relevant de la direction.]
+      \end{itemize}
+    \end{minipage}
+    \\
 
-\small
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{1.9cm} X X >{\raggedright\arraybackslash}p{2.1cm}}
-  \toprule
-  Priorité & Scénario possible & Conséquence & Justification \\
-  \midrule
-  Élevée & [Événement, faiblesse exploitée et actif touché.] & [Impact concret.] & [Preuve ou hypothèse à vérifier.] \\
-  Moyenne & [Scénario formulé simplement.] & [Impact concret.] & [Raison du classement.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
-\normalsize
+    \bottomrule
+  \end{tabularx}
+  \normalsize
 
-\section{Plan d’action proposé}
-
-\small
-\tableauECNSA
-\begin{tabularx}{\linewidth}{>{\bfseries}p{1.9cm} X X >{\raggedright\arraybackslash}p{2.2cm}}
-  \toprule
-  Échéance & Action & Résultat attendu & Responsable \\
-  \midrule
-  Immédiate & [Mesure simple, prioritaire et vérifiable.] & [Comment vérifier que c’est fait ?] & [Rôle.] \\
-  À planifier & [Mesure nécessitant du temps, des moyens ou une validation.] & [Résultat attendu.] & [Rôle.] \\
-  \bottomrule
-\end{tabularx}
-\fintableauECNSA
-\normalsize
-
-\section{Conclusion}
-
-Répondre à la question de départ. Rappeler les constats les plus importants,
-la priorité retenue et les limites qui restent à lever. Ne pas introduire de
-nouveau résultat dans la conclusion.
-
-\section*{Références et annexes}
-\addcontentsline{toc}{section}{Références et annexes}
-
-\begin{itemize}[leftmargin=*]
-  \item [Référence : titre, auteur ou organisme, date et adresse si nécessaire.]
-  \item [Annexe : nom et utilité de la capture, configuration ou donnée jointe.]
-\end{itemize}
+  % Dupliquer un bloc \midrule + ligne pour chaque horizon supplémentaire.
 
 \end{document}

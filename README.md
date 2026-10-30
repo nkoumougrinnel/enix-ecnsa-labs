@@ -23,10 +23,14 @@ Un dossier est consacré à chaque chapitre. Selon les besoins du lab,
 il peut contenir :
 
 - `README.md` : présentation du travail et indications pour le consulter.
-- `rapport/` : sources LaTeX et illustrations.
+- `livrable/` : sources LaTeX et illustrations du rapport de laboratoire.
 - `captures/` : captures réseau utilisées pour les analyses.
 - `configs/` : configurations des équipements et des services.
 - `eve-ng/` : exports du laboratoire.
+
+Le dossier `templates/` à la racine contient les quatre modèles LaTeX
+partagés par tous les chapitres (mini-évaluation, étude de cas, exercice
+individuel, livrable). Voir `templates/README.md` pour l'usage.
 
 Les chapitres sont ajoutés au fur et à mesure de la formation.
 Les participants et leurs contributions sont précisés dans les travaux
